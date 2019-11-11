@@ -1,8 +1,11 @@
 package com.revature.eval.java.core;
 
+import java.util.*; /*this is Sam's change*/
+
+import java.io.*;
+import java.lang.Math;
+
 import java.time.temporal.Temporal;
-import java.util.List;
-import java.util.Map;
 
 public class EvaluationService {
 
@@ -13,9 +16,15 @@ public class EvaluationService {
 	 * @param string
 	 * @return
 	 */
+	
+	
 	public String reverse(String string) {
-		
-		return "";
+		int i;
+		String x = "";
+		for (i = string.length()-1; i >= 0; i--) {
+			x += string.charAt(i);
+		}
+		return x;
 	}
 
 	/**
@@ -28,7 +37,18 @@ public class EvaluationService {
 	 */
 	public String acronym(String phrase) {
 		// TODO Write an implementation for this method declaration
-		return null;
+		StringBuilder acro = new StringBuilder("");
+		String[] phrases = phrase.split("[-\\s]");
+		for (String s : phrases) {
+//			if (s.contains("[.,;:-_]?")) {
+//				String[] sbstr = s.split("[.,;:-_]?");
+//			}
+			char[] x = s.toCharArray();
+			acro.append(x[0]);
+		}
+		String rS = new String(acro);
+		rS = rS.toUpperCase();
+		return rS;
 	}
 
 	/**
@@ -82,17 +102,34 @@ public class EvaluationService {
 
 		public boolean isEquilateral() {
 			// TODO Write an implementation for this method declaration
-			return false;
+			if ((this.getSideOne() == this.getSideTwo()) && (this.getSideOne() == this.getSideThree())){
+				return true;
+			} else {
+				return false;
+			}
 		}
 
 		public boolean isIsosceles() {
 			// TODO Write an implementation for this method declaration
+			if ((this.getSideOne() == this.getSideTwo()) && (this.getSideOne() != this.getSideThree())) {
+				return true;
+			}
+			if ((this.getSideTwo() == this.getSideThree()) && (this.getSideOne() != this.getSideThree())) {
+				return true;
+			}
+			if ((this.getSideThree() == this.getSideOne()) && (this.getSideOne() != this.getSideTwo())) {
+				return true;
+			}
 			return false;
 		}
 
 		public boolean isScalene() {
 			// TODO Write an implementation for this method declaration
-			return false;
+			if ((this.getSideOne() != this.getSideTwo()) && (this.getSideThree() != this.getSideOne()) && (this.getSideTwo() != this.getSideThree())) {
+				return true;
+			} else {
+				return false;
+			}
 		}
 
 	}
@@ -114,11 +151,48 @@ public class EvaluationService {
 	 */
 	public int getScrabbleScore(String string) {
 		// TODO Write an implementation for this method declaration
-		return 0;
+		string = string.toUpperCase();
+		HashMap<Character, Integer> alphabetMap = new HashMap<>();
+		alphabetMap.put('A', 1);
+		alphabetMap.put('E', 1);
+		alphabetMap.put('L', 1);
+		alphabetMap.put('I', 1);
+		alphabetMap.put('O', 1);
+		alphabetMap.put('U', 1);
+		alphabetMap.put('N', 1);
+		alphabetMap.put('R', 1);
+		alphabetMap.put('S', 1);
+		alphabetMap.put('T', 1);
+		alphabetMap.put('D', 2);
+		alphabetMap.put('G', 2);
+		alphabetMap.put('B', 3);
+		alphabetMap.put('C', 3);
+		alphabetMap.put('M', 3);
+		alphabetMap.put('P', 3);
+		alphabetMap.put('F', 4);
+		alphabetMap.put('H', 4);
+		alphabetMap.put('V', 4);
+		alphabetMap.put('W', 4);
+		alphabetMap.put('Y', 4);
+		alphabetMap.put('K', 5);
+		alphabetMap.put('J', 8);
+		alphabetMap.put('X', 8);
+		alphabetMap.put('Q', 10);
+		alphabetMap.put('Z', 10);
+
+		int returnValue = 0;
+		
+		for (int i = 0; i < string.length(); i++) {
+			char x = string.charAt(i);
+			int y = alphabetMap.get(x);
+			returnValue += y;
+		}
+		 
+		return returnValue;
 	}
 
 	/**
-	 * 5. Clean up user-entered phone numbers so that they can be sent SMS messages.
+	 * 5. Clean up user-entered phone numbers so that tstring = string.toUpperCase();hey can be sent SMS messages.
 	 * 
 	 * The North American Numbering Plan (NANP) is a telephone numbering system used
 	 * by many countries in North America like the United States, Canada or Bermuda.
@@ -148,9 +222,35 @@ public class EvaluationService {
 	 * Note: As this exercise only deals with telephone numbers used in
 	 * NANP-countries, only 1 is considered a valid country code.
 	 */
-	public String cleanPhoneNumber(String string) {
+	public String cleanPhoneNumber(String string) throws IllegalArgumentException {
 		// TODO Write an implementation for this method declaration
-		return null;
+		//iterate through string to find first non-1 number; return substring from that index
+		//create new string that iterates through new substring, adding only values integer values to it; return that
+		StringBuilder validNums = new StringBuilder("");
+		String num = "1234567890";
+		String nonNums = "!@#$%^&*(\'\")_-+=.,<>";
+		String whiteSpace = " ";
+		char[] input = string.toCharArray();
+		for (char c : input) {
+			String s = c+"";
+			if (num.contains(s)) {
+				validNums.append(c);
+			}
+		}
+		String returnString = new String(validNums);
+		if (returnString.charAt(0) == 1) {
+			char[] stringChar = returnString.toCharArray();
+			StringBuilder sb = new StringBuilder("");
+			for (int i = 1; i < returnString.length(); i++) {
+				sb.append(stringChar[i]);
+			}
+			returnString = sb.toString();
+		} 
+		if (returnString.length() != 10) {
+			throw new IllegalArgumentException("String is not of valid length, or contains non-numeric characters");
+		}
+		
+		return returnString;
 	}
 
 	/**
@@ -164,7 +264,22 @@ public class EvaluationService {
 	 */
 	public Map<String, Integer> wordCount(String string) {
 		// TODO Write an implementation for this method declaration
-		return null;
+		Map<String, Integer> wordMap = new HashMap<>();
+		string = string.toLowerCase();
+		String[] spaceStrings = string.split("\\s*(=>|,|\\s)\\s*");
+		Integer i = 1;
+		for (String s : spaceStrings) {
+			if (wordMap.containsKey(s)){
+				Integer x = wordMap.get(s);
+				x++;
+				wordMap.remove(s);
+				wordMap.put(s,x);
+			} else {
+				wordMap.put(s,i);
+			}
+			
+		}
+		return wordMap; 
 	}
 
 	/**
@@ -243,8 +358,42 @@ public class EvaluationService {
 	 * @return
 	 */
 	public String toPigLatin(String string) {
-		// TODO Write an implementation for this method declaration
-		return null;
+		String suffix = "ay";
+		String[] stringArray = string.split(" ");
+		String vowels = "yaeiou";
+		StringBuilder pigWord = new StringBuilder("");
+		
+		for (String s : stringArray) {
+			int i = 0; 
+			for (int m = 0; m < s.length(); m++) {
+				String c = s.charAt(m)+"";
+				if (vowels.contains(c)) {
+					if ((m == 0)) {
+						if ((s.charAt(m)=='y')) {
+							i++;
+							break;
+						} 
+					}
+					break;
+				} else if ((s.charAt(m)=='q')&&(s.charAt(m+1)=='u')) {
+					i = 2;
+					break;
+				} else {
+					i++;
+				}
+			}
+			for (int k = i; k < s.length(); k++) {
+				pigWord.append(s.charAt(k));
+			}
+			for (int l = 0; l < i; l++) {
+				pigWord.append(s.charAt(l));
+			}
+			pigWord.append(suffix).append(" ");
+		}
+		String pigWordS = pigWord.toString();
+		pigWordS = pigWordS.trim();
+
+		return pigWordS;
 	}
 
 	/**
@@ -264,23 +413,171 @@ public class EvaluationService {
 	 */
 	public boolean isArmstrongNumber(int input) {
 		// TODO Write an implementation for this method declaration
-		return false;
+		double inputD = input;
+		String inputsb = Integer.toString(input);
+		int e = inputsb.length();
+		double exponent = e;
+		double product = 0;
+		for (int i = 0; i < e; i++) {
+			String s = inputsb.charAt(i) + "";
+			double x = Double.parseDouble(s);
+			double y = Math.pow(x, exponent);
+			product += y;
+		}
+		
+		System.out.println(product + " this is the product");
+		if (product == inputD) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	/**
 	 * 10. Compute the prime factors of a given natural number.
 	 * 
-	 * A prime number is only evenly divisible by itself and 1.
+	 * A prime number is only evenly divisible eby itself and 1.
 	 * 
 	 * Note that 1 is not a prime number.
 	 * 
 	 * @param l
 	 * @return
 	 */
+	public List<Long> primeExponentCheck(long l, long m, List<Long> primes) { //m is mantissa, or i from given method
+		double kD = 2;
+		double iD = m;
+		double lD = l;
+		double mD = 2;
+		if (Math.pow(iD, kD) <= lD) {
+			for (; Math.pow(iD, kD) <= lD;) {
+				
+				if (Math.pow(iD, kD) == lD) {
+					while (mD <= kD); {
+						primes.add(wrapLong(m));
+						mD++;
+					} 
+					return primes;
+				}
+				kD++;
+			}
+			return primes;
+		}
+		return primes;
+	}
+	public Long wrapLong(long l) {
+		Long lL = new Long(l);
+		return lL;
+	}
 	public List<Long> calculatePrimeFactorsOf(long l) {
 		// TODO Write an implementation for this method declaration
-		return null;
+		List<Long> primeLongFactors = new ArrayList<>();
+		if (l > 1L) { //put validation for 2 as prime into main for loop to auto meet test req
+			for (long i = 2L; i < l;) { //iterate through all numbers less than l
+				if ((l%i == 0)) {
+					for (long j = 2L; j < i; j++) { //test up to l = j-1 & l = i - 1
+//						if ((l == 2)|(i==2)) { //oddest prime; also passes isPrime test
+//							primeLongFactors.add(wrapLong(2));
+//						}
+						if ((i%j == 0)&&(j>=2)) {
+							break;
+						} else if ((i%2 == 0)&&(j>2)) {
+							break;
+						}
+						if ((j == i -1L)|(j+1L==i)|(i==2)){
+							double m = i;
+							double k = 2D;
+							double n = l;
+							System.out.println(Math.pow(m,k));
+
+							while (Math.pow(m, k) <= n) {
+								System.out.println(Math.pow(m,k));
+								double listSize = primeLongFactors.size();
+								if (Math.pow(m, k) == n) {
+									double p = k;
+									while(p-1 > 0) {
+										primeLongFactors.add(wrapLong(i));
+										p--; //different variable still does
+									}
+									double newListSize = primeLongFactors.size();
+									if (listSize != newListSize) {
+										break;
+									}
+								}
+								k++;
+							}
+							primeLongFactors.add(wrapLong(i)); //implement primeExponentCheck below; i is prime
+							//must use for loop to add values from a List to another List (enhanced for)
+						} 
+					}
+				} 
+				i++; //increment i here to use less chars in below block
+				if ((i==l)&&(primeLongFactors.isEmpty())) { //passes isPrime test
+					primeLongFactors.add(wrapLong(i));
+				}
+			}
+			return primeLongFactors;
+		} 
+		return primeLongFactors;
 	}
+	
+
+//	
+//	public List<Long> calculatePrimeFactorsOf(long l) {
+//		List<Long> returnList = new ArrayList<>();
+//		long j = 2; 
+//		while (j<=l) {
+//			if ((l%j == 0)) {
+//				if (returnList.isEmpty()) {
+//					//handle 2
+//					returnList.add(j);
+//				} else {
+//					//otherwise, check if it j is prime
+//					for (long k = 2; k <= j; k++) {
+//						if (j%k == 0) {
+//							if (k==2) {
+//								returnList.add(k);
+//							} else if ((j%k!=0L)&&(k == j-1L)) {
+//									returnList.add(j);
+//								if (l%j == 0L) {
+//									returnList.add(j);
+//								}
+//							} else {
+//								break;
+//							}
+//						}
+//					}
+//				}
+//			} j++;
+//		}
+//		System.out.println(returnList.toString());
+//		return returnList;
+//	}
+		// TODO Write an implementation for this method declaration
+//		List<Long> primeLongFactors = new ArrayList<>();
+		/**
+		 * see if it is divisible by smallest prime number (divide it)
+		 * repeat until 
+		 * 
+		 * a numbers factors are all of the factors of any numbers that can be multiplied to equal the first
+		 * also where the factors of the number have factors themselves 
+		 * 8's factors are also the factors of the numbers inside it that can be broken down further
+		 * 
+		 * 
+		 * 12%2==0
+		 * 6%2==0
+		 * 3%2==1
+		 * .add(2)
+		 * .add(2)
+		 * 
+		 * relatively prime numbers are numbers that have no common factors between them, but their factors are primes
+		 * 
+		 * 8x1
+		 * 4x2 = 
+		 * 2x4
+		 * 1x8
+		 * 
+		 */
+//	
 
 	/**
 	 * 11. Create an implementation of the rotational cipher, also sometimes called
@@ -310,6 +607,9 @@ public class EvaluationService {
 	 */
 	static class RotationalCipher {
 		private int key;
+		//create arrray object
+		String alph = "abcdefghijklmnopqrstuvwxyz";
+		String ALPH = alph.toUpperCase();
 
 		public RotationalCipher(int key) {
 			super();
@@ -317,10 +617,27 @@ public class EvaluationService {
 		}
 
 		public String rotate(String string) {
-			// TODO Write an implementation for this method declaration
-			return null;
+			// TODO Write an implementation for this metmapIndex++hod declaration
+			char[] sChar = string.toCharArray();
+			StringBuilder appendChar = new StringBuilder();
+			for (char c : sChar) {
+				String s = c+"";
+				if (alph.contains(s)) {
+					int i = alph.indexOf(s);
+					int j = i + key + 26;
+					int l = j%26;
+					appendChar.append(alph.charAt(l));
+				} else if (ALPH.contains(s)) {
+					int i = ALPH.indexOf(s);
+					int j = i + key + 26;
+					int l = j%26;
+					appendChar.append(ALPH.charAt(l));
+				} else {
+					appendChar.append(s);
+				}
+			}
+			return appendChar.toString();
 		}
-
 	}
 
 	/**
@@ -330,16 +647,40 @@ public class EvaluationService {
 	 * that the 6th prime is 13.
 	 * 
 	 * If your language provides methods in the standard library to deal with prime
-	 * numbers, pretend they don't exist and implement them yourself.
+	 * numbers, pretend they don't exist and impleString alph = "abcdefghijklmnopqrstuvwxyz";
+		char[] alphabet = alph.toCharArray();ment them yourself.
 	 * 
 	 * @param i
 	 * @return
 	 */
-	public int calculateNthPrime(int i) {
+	public int calculateNthPrime(int i) throws IllegalArgumentException {
 		// TODO Write an implementation for this method declaration
+		if (i<1)
+			throw new IllegalArgumentException("0 is not a valid argument!");
+		if (i>0) {
+			int j = 2;
+			int counter = 1;
+			while (counter != i) {
+				for(int k = 2; k < j; k++) {
+					if((j%k == 0)||(j%2==0)) {
+						break;
+					} else if ((k == j-1)){
+						counter++;
+						if (counter == i) {
+							return j;
+						}
+					}
+				}
+				j++;
+			}
+			return j;
+		 }
+		
 		return 0;
 	}
-
+	
+	
+	
 	/**
 	 * 13 & 14. Create an implementation of the atbash cipher, an ancient encryption
 	 * system created in the Middle East.
@@ -353,7 +694,8 @@ public class EvaluationService {
 	 * 
 	 * Plain: abcdefghijklmnopqrstuvwxyz Cipher: zyxwvutsrqponmlkjihgfedcba It is a
 	 * very weak cipher because it only has one possible key, and it is a simple
-	 * monoalphabetic substitution cipher. However, this may not have been an issue
+	 * monoalphabetic su	}
+bstitution cipher. However, this may not have been an issue
 	 * in the cipher's time.
 	 * 
 	 * Ciphertext is written out in groups of fixed length, the traditional group
@@ -365,7 +707,11 @@ public class EvaluationService {
 	 *
 	 */
 	static class AtbashCipher {
-
+		static String alph = "abcdefghijklmnopqrstuvwxyz";
+		static char[] alphabet = alph.toCharArray();
+		static String balph = "zyxwvutsrqponmlkjihgfedcba";
+		static char[] balphabet = balph.toCharArray();
+		static String num = "1234567890";
 		/**
 		 * Question 13
 		 * 
@@ -374,7 +720,40 @@ public class EvaluationService {
 		 */
 		public static String encode(String string) {
 			// TODO Write an implementation for this method declaration
-			return null;
+			string = string.toLowerCase();
+			char[] sChar = string.toCharArray();
+			StringBuilder appendChar = new StringBuilder("");
+			int fiveChar = 0;
+			for (char c : sChar) {
+				String s = c+"";
+				if ((alph.contains(s))) {
+					int f = alph.indexOf(c);
+					appendChar.append(balphabet[f]);
+					fiveChar++;
+					if (((fiveChar)%5 == 0)) {
+						appendChar.append(" ");
+					}
+				} else if (num.contains(s)) {
+					appendChar.append(c);
+					fiveChar++;
+					if (((fiveChar)%5 == 0)) {
+						appendChar.append(" ");
+					}
+				}
+			}
+			//ensure that the last character of the return value is not " "
+			if (appendChar.lastIndexOf(" ") == appendChar.length() - 1) {
+				String s = new String(appendChar);
+				char[] newArray = s.toCharArray();
+				StringBuilder newAppendChar = new StringBuilder("");
+				for (int i = 0; i < s.length() -1; i++) {
+					newAppendChar.append(newArray[i]);
+				}
+				String t = new String(newAppendChar);
+				return t;
+			}
+			String s = new String(appendChar);
+			return s;
 		}
 
 		/**
@@ -385,7 +764,25 @@ public class EvaluationService {
 		 */
 		public static String decode(String string) {
 			// TODO Write an implementation for this method declaration
-			return null;
+			String[] strings = string.split(" ");
+			StringBuilder sb = new StringBuilder("");
+			for (String s : strings) {
+				sb.append(s);
+			}
+			String concatStrings = new String(sb);
+			char[] cArray = concatStrings.toCharArray();
+			StringBuilder toReturn = new StringBuilder("");
+			for (char c: cArray) {
+				String s = c+"";
+				if (num.contains(s)) {
+					toReturn.append(s);
+				} else if (balph.contains(s)) {
+					int targetIndex = balph.indexOf(s);
+					toReturn.append(alph.charAt(targetIndex));
+				}
+			}
+			String tR = new String(toReturn);
+			return tR;
 		}
 	}
 
@@ -401,7 +798,8 @@ public class EvaluationService {
 	 * (x1 * 10 + x2 * 9 + x3 * 8 + x4 * 7 + x5 * 6 + x6 * 5 + x7 * 4 + x8 * 3 + x9
 	 * * 2 + x10 * 1) mod 11 == 0 If the result is 0, then it is a valid ISBN-10,
 	 * otherwise it is invalid.
-	 * 
+	 * 	}
+
 	 * Example Let's take the ISBN-10 3-598-21508-8. We plug it in to the formula,
 	 * and get:
 	 * 
@@ -413,6 +811,39 @@ public class EvaluationService {
 	 */
 	public boolean isValidIsbn(String string) {
 		// TODO Write an implementation for this method declaration
+		//format input to a string of numbers
+		String num = "1234567890";
+		char[] initialInput = string.toCharArray();
+		StringBuilder sb = new StringBuilder("");
+		for (char c : initialInput) {
+			String s = c+"";
+			if (num.contains(s)) {
+				sb.append(c);
+			} else if ((c == ('X'))) {
+				sb.append(c);
+			}
+		}
+		
+		String s = new String(sb);
+		int multiple = 10;
+		int[] multiples = new int[10];
+		int n;
+		for (int i = 0; i < s.length(); i++) {
+			if (s.charAt(i) == 'X'){
+				n = 10;
+			} else {
+				n = s.charAt(i);
+			}
+			multiples[i] = n * multiple;
+			multiple--;
+		}
+		int value = 0;
+		for (int i: multiples) {
+			value += i;
+		}
+		if ((value%11)==0) {
+			return true;
+		}
 		return false;
 	}
 
@@ -430,13 +861,51 @@ public class EvaluationService {
 	 * @return
 	 */
 	public boolean isPangram(String string) {
-		// TODO Write an implementation for this method declaration
-		return false;
+		String alph = "abcdefghijklmnopqrstuvwxyz";
+		string = string.toLowerCase();
+		Map<Character, Integer> p = new HashMap<>();
+		char[] sChar = string.toCharArray();
+		Integer i = 0;
+		for (char c : sChar) {
+			String s = c+"";
+			if (alph.contains(s)) {
+				Character key = c;
+				if (p.containsKey(key) == false) {
+					p.put(c, i);
+					i++;
+				}
+			}
+		}
+		if (p.size() == 26) {
+			return true;
+		} else {
+			return false;
+		}
+//		char[] alphabet = "abcdefghijklmnopqrstuvwxyz".toCharArray();
+//		Integer mapIndex = new Integer(0);
+//		HashMap<Character, Integer> checkLetterMap = new HashMap<>();
+//		for (Integer i = 0; i < string.length(); i++) {
+//			Character charI = new Character(string.charAt(i));
+//			for (char c : alphabet) {
+//				Character charC = new Character(c);
+//				if ((charC == charI) && (checkLetterMap.containsKey(charI) != true)) {
+//					mapIndex++;
+//					checkLetterMap.put(charI, mapIndex);
+//				}
+//			}
+//		}
+//		Integer mapSize = new Integer(checkLetterMap.size());
+//		Integer alphabetLen = new Integer(26);
+//		if (mapSize == alphabetLen) {
+//			return true;
+//		} else {
+//			return false;
+//		}
 	}
 
 	/**
 	 * 17. Calculate the moment when someone has lived for 10^9 seconds.
-	 * 
+	 * SKIP THIS QUESTION
 	 * A gigasecond is 109 (1,000,000,000) seconds.
 	 * 
 	 * @param given
@@ -462,7 +931,24 @@ public class EvaluationService {
 	 */
 	public int getSumOfMultiples(int i, int[] set) {
 		// TODO Write an implementation for this method declaration
-		return 0;
+		//use while loop to iterate through all multiples
+		int j = 0;
+		List<Integer> multiples = new ArrayList<>();
+		while (j < i) {
+			for(int k : set) {
+				if(j%k == 0) {
+					if (multiples.contains(j) == false)
+					multiples.add(j);
+				}
+			}
+			j++;
+		}
+		Integer x = 0;
+		for (Integer l : multiples) {
+			x += l;
+		}
+		int r = x;
+		return r;
 	}
 
 	/**
@@ -535,6 +1021,34 @@ public class EvaluationService {
 	 */
 	public int solveWordProblem(String string) {
 		// TODO Write an implementation for this method declaration
+		String[] input = string.split("\\s|\\?");
+		for (String s : input) {
+			System.out.println(s);
+		}
+		String num = "1234567890";
+		Integer[] numArray = new Integer[2];
+		int numCount = 0;
+		for (String s : input) {
+			if (num.contains(s)) {
+				Integer n = new Integer(s);
+				numArray[numCount] = n;
+				numCount++;
+			} 
+		}
+		int a = numArray[0];
+		int b = numArray[1];
+		System.out.println(a + "this is a");
+		for (String s : input) {
+			if (s.contains("plus")) {
+				return a + b;
+			} else if (s.contains("minus")) {
+				return a - b;
+			} else if (s.contains("divided")) {
+				return a / b;
+			} else if (s.contains("multiplied")) {
+				return a * b;
+			}
+		}
 		return 0;
 	}
 
